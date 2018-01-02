@@ -1,14 +1,26 @@
 package tomaszkruzel.shoppinglist.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Simple POJO that represents a shopping list.
  */
+@Entity
 public class ShoppingList {
 
+	@PrimaryKey(autoGenerate = true)
 	private final long id;
 	private final String title;
 	private final long created;
 	private final boolean archived;
+
+	public ShoppingList(final long id, final String title, final long created, final boolean archived) {
+		this.id = id;
+		this.title = title;
+		this.created = created;
+		this.archived = archived;
+	}
 
 	private ShoppingList(final Builder builder) {
 		id = builder.id;
