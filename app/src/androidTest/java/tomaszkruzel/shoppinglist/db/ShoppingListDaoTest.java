@@ -110,4 +110,16 @@ public class ShoppingListDaoTest extends DbTest {
 		assertThat(getValue(shoppingListDao.fetchById(id)), is(updatedShoppingList));
 	}
 
+	@Test
+	public void listRemoval() throws InterruptedException {
+		List<ShoppingList> archivedShoppingLists = getValue(shoppingListDao.fetchArchived());
+		assertThat(archivedShoppingLists.size(), is(2));
+
+		shoppingListDao.remove(archivedShoppingLists.get(0));
+		assertThat(getValue(shoppingListDao.fetchArchived()).size(), is(1));
+
+		shoppingListDao.remove(archivedShoppingLists.get(1));
+		assertThat(getValue(shoppingListDao.fetchArchived()).size(), is(0));
+	}
+
 }

@@ -18,4 +18,5 @@ public class DateTestUtil {
 		return millisOf(year, month, day, 0, 0);
 	}
 
+	public static final long januaryFirst = millisOf(2018, 1, 1);
 }

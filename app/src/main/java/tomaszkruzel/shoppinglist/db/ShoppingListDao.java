@@ -1,10 +1,7 @@
 package tomaszkruzel.shoppinglist.db;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
+import android.arch.persistence.room.*;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 
 import java.util.List;
@@ -26,4 +23,8 @@ public interface ShoppingListDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	void persist(List<ShoppingList> shoppingList);
+
+	@Delete
+	void remove(ShoppingList shoppingList);
+
 }
