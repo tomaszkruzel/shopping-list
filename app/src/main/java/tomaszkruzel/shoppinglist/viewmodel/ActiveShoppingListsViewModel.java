@@ -7,6 +7,7 @@ import tomaszkruzel.shoppinglist.businesslogic.manager.ShoppingListManager;
 import tomaszkruzel.shoppinglist.db.ShoppingListDao;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class ActiveShoppingListsViewModel extends ViewModel {
@@ -14,6 +15,7 @@ public class ActiveShoppingListsViewModel extends ViewModel {
 	private final ShoppingListManager shoppingListManager;
 	private final LiveData<List<ShoppingList>> activeShoppingLists;
 
+	@Inject
 	public ActiveShoppingListsViewModel(final ShoppingListDao shoppingListDao, final ShoppingListManager shoppingListManager) {
 		this.shoppingListManager = shoppingListManager;
 		activeShoppingLists = shoppingListDao.fetchActive();

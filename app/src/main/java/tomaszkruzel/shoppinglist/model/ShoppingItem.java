@@ -1,5 +1,6 @@
 package tomaszkruzel.shoppinglist.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
@@ -16,6 +17,7 @@ public class ShoppingItem {
 
 	@PrimaryKey(autoGenerate = true)
 	private final long id;
+	@ColumnInfo(index = true)
 	private final long shoppingListId;
 	private final String title;
 	private final long created;

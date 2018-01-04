@@ -7,7 +7,9 @@ import tomaszkruzel.shoppinglist.db.ShoppingListDao;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ShoppingListManagerImpl implements ShoppingListManager {
 
 	private final ShoppingListDao shoppingListDao;
@@ -50,8 +52,6 @@ public class ShoppingListManagerImpl implements ShoppingListManager {
 	@Override
 	public void remove(@NonNull final ShoppingList shoppingList) {
 		appExecutors.diskIO()
-				.execute(() -> {
-					shoppingListDao.remove(shoppingList);
-				});
+				.execute(() -> shoppingListDao.remove(shoppingList));
 	}
 }
