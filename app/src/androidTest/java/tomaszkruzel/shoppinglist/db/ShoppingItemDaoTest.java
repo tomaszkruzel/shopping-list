@@ -20,6 +20,7 @@ import static tomaszkruzel.shoppinglist.testutils.LiveDataTestUtil.getValue;
 public class ShoppingItemDaoTest extends DbTest {
 
 	private ShoppingItemDao shoppingItemDao;
+	private ShoppingListDao shoppingListDao;
 	private long wishlistId;
 	private long groceryListId;
 
@@ -28,7 +29,7 @@ public class ShoppingItemDaoTest extends DbTest {
 		super.initDb();
 
 		// shopping item won't exist without shopping list
-		final ShoppingListDao shoppingListDao = db.shoppingListDao();
+		shoppingListDao = db.shoppingListDao();
 		wishlistId = shoppingListDao.persist(new ShoppingList.Builder()//
 				.title("My wishlist")
 				.archived(false)
@@ -118,6 +119,16 @@ public class ShoppingItemDaoTest extends DbTest {
 		shoppingItemDao.persist(updatedShoppingItemBuilder.build());
 
 		assertThat(getValue(shoppingItemDao.fetch(groceryListId)).get(0), is(updatedShoppingItemBuilder.build()));
+	}
+
+	@Test
+	public void removingShoppingListShouldRemoveItsItems() throws InterruptedException {
+		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(2));
+
+		final ShoppingList wishlist = getValue(shoppingListDao.fetchById(wishlistId));
+		shoppingListDao.remove(wishlist);
+
+		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(0));
 	}
 
 }
