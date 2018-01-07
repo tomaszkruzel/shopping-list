@@ -33,12 +33,12 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 		initToolbar();
 		initViews();
 
-		adapter = new ActiveShoppingListsAdapter(R.layout.item_shopping_list);
-		recyclerView.setAdapter(adapter);
-		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
 		viewModel = ViewModelProviders.of(this, viewModelFactory)
 				.get(ActiveShoppingListsViewModel.class);
+
+		adapter = new ActiveShoppingListsAdapter(R.layout.item_shopping_list, this, viewModel);
+		recyclerView.setAdapter(adapter);
+		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 		viewModel.getActiveShoppingLists()
 				.observe(this, shoppingLists -> {

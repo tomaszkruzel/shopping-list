@@ -4,4 +4,9 @@
     <string name="dialog_add">Add</string>
     <string name="dialog_title_add_list">Add list</string>
     <string name="dialog_list_name">List name</string>
+
+    <string-array name="active_shopping_list_options">
+        <item>Archive</item>
+        <item>Remove</item>
+    </string-array>
 </resources>
