@@ -5,7 +5,7 @@ import dagger.android.ContributesAndroidInjector;
 import tomaszkruzel.shoppinglist.ActiveShoppingListsActivity;
 
 @Module
-public abstract class MainActivityModule {
+public abstract class ActiveShoppingListsActivityModule {
 
 	@ContributesAndroidInjector
 	abstract ActiveShoppingListsActivity contributeActiveShoppingListsActivity();

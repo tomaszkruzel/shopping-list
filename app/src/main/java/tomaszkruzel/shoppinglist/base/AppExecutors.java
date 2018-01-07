@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tomaszkruzel.shoppinglist;
+package tomaszkruzel.shoppinglist.base;
 
 import android.os.Handler;
 import android.os.Looper;

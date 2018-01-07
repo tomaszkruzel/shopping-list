@@ -1,7 +1,7 @@
 package tomaszkruzel.shoppinglist.businesslogic.manager;
 
 import android.support.annotation.NonNull;
-import tomaszkruzel.shoppinglist.AppExecutors;
+import tomaszkruzel.shoppinglist.base.AppExecutors;
 import tomaszkruzel.shoppinglist.businesslogic.time.TimeProvider;
 import tomaszkruzel.shoppinglist.db.ShoppingListDao;
 import tomaszkruzel.shoppinglist.model.ShoppingList;

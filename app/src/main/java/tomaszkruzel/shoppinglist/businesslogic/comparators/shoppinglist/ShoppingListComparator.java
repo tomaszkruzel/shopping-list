@@ -1,4 +1,4 @@
-package tomaszkruzel.shoppinglist.comparators.shoppinglist;
+package tomaszkruzel.shoppinglist.businesslogic.comparators.shoppinglist;
 
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 import tomaszkruzel.shoppinglist.utils.LongUtils;

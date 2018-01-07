@@ -1,4 +1,4 @@
-package tomaszkruzel.shoppinglist.comparators.shoppinglist;
+package tomaszkruzel.shoppinglist.businesslogic.comparators.shoppinglist;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

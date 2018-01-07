@@ -1,4 +1,4 @@
-package tomaszkruzel.shoppinglist.comparators;
+package tomaszkruzel.shoppinglist.businesslogic.comparators;
 
 import android.support.annotation.NonNull;
 

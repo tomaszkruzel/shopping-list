@@ -9,7 +9,7 @@ import tomaszkruzel.shoppinglist.MyApplication;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = { AndroidInjectionModule.class, AppModule.class, MainActivityModule.class })
+@Component(modules = { AndroidInjectionModule.class, AppModule.class, ActiveShoppingListsActivityModule.class })
 public interface AppComponent {
 
 	@Component.Builder

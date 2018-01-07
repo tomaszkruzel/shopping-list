@@ -16,7 +16,7 @@
 
 package tomaszkruzel.shoppinglist.testutils;
 
-import tomaszkruzel.shoppinglist.AppExecutors;
+import tomaszkruzel.shoppinglist.base.AppExecutors;
 
 import java.util.concurrent.Executor;
 

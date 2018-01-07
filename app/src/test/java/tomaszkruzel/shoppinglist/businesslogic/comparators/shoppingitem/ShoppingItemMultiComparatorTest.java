@@ -1,10 +1,10 @@
-package tomaszkruzel.shoppinglist.comparators.shoppingitem;
+package tomaszkruzel.shoppinglist.businesslogic.comparators.shoppingitem;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import tomaszkruzel.shoppinglist.comparators.MultiComparator;
+import tomaszkruzel.shoppinglist.businesslogic.comparators.MultiComparator;
 import tomaszkruzel.shoppinglist.model.ShoppingItem;
 
 import java.util.Arrays;
