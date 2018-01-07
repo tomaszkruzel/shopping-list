@@ -10,4 +10,6 @@ public interface ShoppingListManager {
 	void archive(@NonNull ShoppingList shoppingList);
 
 	void remove(@NonNull ShoppingList shoppingList);
+
+	void unarchive(ShoppingList shoppingList);
 }

@@ -54,4 +54,15 @@ public class ShoppingListManagerImpl implements ShoppingListManager {
 		appExecutors.diskIO()
 				.execute(() -> shoppingListDao.remove(shoppingList));
 	}
+
+	@Override
+	public void unarchive(final ShoppingList shoppingList) {
+		appExecutors.diskIO()
+				.execute(() -> {
+					final ShoppingList updatedShoppingList = new ShoppingList.Builder(shoppingList)//
+							.archived(false)
+							.build();
+					shoppingListDao.persist(updatedShoppingList);
+				});
+	}
 }

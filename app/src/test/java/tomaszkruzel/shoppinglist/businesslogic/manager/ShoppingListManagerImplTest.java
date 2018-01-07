@@ -68,6 +68,26 @@ public class ShoppingListManagerImplTest {
 	}
 
 	@Test
+	public void unarchiveShoppingList() {
+		final ShoppingList shoppingList = new ShoppingList.Builder()//
+				.id(12)
+				.title("2017 wishlist")
+				.created(januaryFirst)
+				.archived(true)
+				.build();
+
+		shoppingListManager.unarchive(shoppingList);
+
+		final ArgumentCaptor<ShoppingList> captor = ArgumentCaptor.forClass(ShoppingList.class);
+		verify(shoppingListDao).persist(captor.capture());
+
+		final ShoppingList modifiedShoppingList = new ShoppingList.Builder(shoppingList)//
+				.archived(false)
+				.build();
+		assertThat(captor.getValue(), is(modifiedShoppingList));
+	}
+
+	@Test
 	public void removeShoppingList() {
 		final ShoppingList shoppingList = new ShoppingList.Builder()//
 				.id(12)

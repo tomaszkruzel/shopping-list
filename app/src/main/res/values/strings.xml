@@ -1,12 +1,26 @@
 <resources>
     <string name="app_name">Shopping List</string>
+
+    <!-- Active Shopping Lists START -->
+    <string name="title_active_shopping_lists">Current lists</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
     <string name="dialog_title_add_list">Add list</string>
     <string name="dialog_list_name">List name</string>
-
     <string-array name="active_shopping_list_options">
         <item>Archive</item>
         <item>Remove</item>
     </string-array>
+    <string name="change_sorting_order">Change sorting order</string>
+    <string name="go_to_archive">Archive</string>
+    <!-- Active Shopping Lists END -->
+
+    <!-- Archived Shopping Lists START -->
+    <string name="title_archived_shopping_lists">Archived lists</string>
+    <string-array name="archived_shopping_list_options">
+        <item>Unarchive</item>
+        <item>Remove</item>
+    </string-array>
+    <!-- Archived Shopping Lists END -->
+
 </resources>
