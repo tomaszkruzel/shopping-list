@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
@@ -43,13 +44,11 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 				});
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		viewModel.addShoppingList("onResume");
-	}
-
 	private void initViews() {
 		recyclerView = findViewById(R.id.active_shoppping_lists);
+	}
+
+	public void addList(View view) {
+		AddListDialog.show(this, viewModel);
 	}
 }
