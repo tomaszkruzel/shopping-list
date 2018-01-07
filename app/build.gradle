@@ -4,11 +4,12 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "tomaszkruzel.shoppinglist"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -20,11 +21,16 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    def supportLibsVersion = '26.1.0'
+    implementation "com.android.support:appcompat-v7:${supportLibsVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibsVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     implementation 'com.jakewharton:butterknife:8.6.0'

@@ -2,7 +2,7 @@ package tomaszkruzel.shoppinglist.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import tomaszkruzel.shoppinglist.ActiveShoppingListsActivity;
+import tomaszkruzel.shoppinglist.ui.activeshoppinglists.ActiveShoppingListsActivity;
 
 @Module
 public abstract class ActiveShoppingListsActivityModule {

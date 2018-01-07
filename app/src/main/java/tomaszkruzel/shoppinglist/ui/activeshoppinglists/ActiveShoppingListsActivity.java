@@ -1,14 +1,13 @@
-package tomaszkruzel.shoppinglist;
+package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.RecyclerView;
 import dagger.android.AndroidInjection;
-import java8.util.stream.Collectors;
-import java8.util.stream.StreamSupport;
-import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 
 import javax.inject.Inject;
@@ -18,8 +17,9 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
-	private TextView whatever;
 	private ActiveShoppingListsViewModel viewModel;
+	private RecyclerView recyclerView;
+	private ActiveShoppingListsAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +28,17 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_shopping_lists);
 		initViews();
 
+		adapter = new ActiveShoppingListsAdapter(R.layout.item_shopping_list);
+		recyclerView.setAdapter(adapter);
+		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
 		viewModel = ViewModelProviders.of(this, viewModelFactory)
 				.get(ActiveShoppingListsViewModel.class);
 
 		viewModel.getActiveShoppingLists()
 				.observe(this, shoppingLists -> {
 					if (shoppingLists != null) {
-						whatever.setText(StreamSupport.stream(shoppingLists)
-								.map(ShoppingList::toString)
-								.collect(Collectors.joining("\n")));
+						adapter.updateItems(shoppingLists);
 					}
 				});
 	}
@@ -48,6 +50,6 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 	}
 
 	private void initViews() {
-		whatever = findViewById(R.id.whatever);
+		recyclerView = findViewById(R.id.active_shoppping_lists);
 	}
 }
