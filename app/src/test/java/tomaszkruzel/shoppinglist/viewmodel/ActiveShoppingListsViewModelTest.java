@@ -1,6 +1,10 @@
 package tomaszkruzel.shoppinglist.viewmodel;
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -16,6 +20,9 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnit4.class)
 public class ActiveShoppingListsViewModelTest {
 
+	@Rule
+	public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
+
 	private ActiveShoppingListsViewModel viewModel;
 	private ShoppingListDao shoppingListDao;
 	private ShoppingListManager shoppingListManager;
@@ -28,9 +35,16 @@ public class ActiveShoppingListsViewModelTest {
 	}
 
 	@Test
-	public void fetchCalledOnce() {
+	public void noFetchWhenNotObserved() {
 		viewModel.getActiveShoppingLists();
-		viewModel.getActiveShoppingLists();
+		verify(shoppingListDao, never()).fetchActive();
+	}
+
+	@Test
+	public void fetchWhenObserved() {
+		when(shoppingListDao.fetchActive()).thenReturn(new MutableLiveData<>());
+		viewModel.getActiveShoppingLists()
+				.observeForever(mock(Observer.class));
 		verify(shoppingListDao, times(1)).fetchActive();
 	}
 
