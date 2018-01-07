@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
@@ -27,6 +30,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shopping_lists);
+		initToolbar();
 		initViews();
 
 		adapter = new ActiveShoppingListsAdapter(R.layout.item_shopping_list);
@@ -42,6 +46,28 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 						adapter.updateItems(shoppingLists);
 					}
 				});
+	}
+
+	private void initToolbar() {
+		Toolbar toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_active_shopping_lists, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_sort:
+				viewModel.changeSortingOrder();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void initViews() {
