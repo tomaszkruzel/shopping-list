@@ -1,13 +1,13 @@
 package tomaszkruzel.shoppinglist.ui.archivedshoppinglists;
 
 import android.app.Activity;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.base.recyclerview.SingleLayoutAdapter;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.ui.shoppingitems.ShoppingItemsActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ArchivedShoppingListsViewModel;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ class ArchivedShoppingListsAdapter extends SingleLayoutAdapter {
 	private Activity activity;
 	private ArchivedShoppingListsViewModel viewModel;
 
-	ArchivedShoppingListsAdapter(@LayoutRes final int layoutId, Activity activity, ArchivedShoppingListsViewModel viewModel) {
-		super(layoutId);
+	ArchivedShoppingListsAdapter(Activity activity, ArchivedShoppingListsViewModel viewModel) {
+		super(R.layout.item_shopping_list);
 		this.activity = activity;
 		this.viewModel = viewModel;
 	}
@@ -38,6 +38,12 @@ class ArchivedShoppingListsAdapter extends SingleLayoutAdapter {
 	public void updateItems(final List<ShoppingList> shoppingLists) {
 		items = shoppingLists;
 		notifyDataSetChanged();
+	}
+
+	@Override
+	protected void itemClickListener(final int adapterPosition) {
+		final ShoppingList shoppingList = items.get(adapterPosition);
+		activity.startActivity(ShoppingItemsActivity.newIntent(activity, shoppingList));
 	}
 
 	@Override

@@ -30,12 +30,12 @@ public class ShoppingItemDaoTest extends DbTest {
 
 		// shopping item won't exist without shopping list
 		shoppingListDao = db.shoppingListDao();
-		wishlistId = shoppingListDao.persist(new ShoppingList.Builder()//
+		wishlistId = shoppingListDao.insert(new ShoppingList.Builder()//
 				.title("My wishlist")
 				.archived(false)
 				.build());
 
-		groceryListId = shoppingListDao.persist(new ShoppingList.Builder()//
+		groceryListId = shoppingListDao.insert(new ShoppingList.Builder()//
 				.title("Grocery")
 				.archived(false)
 				.build());
@@ -55,14 +55,14 @@ public class ShoppingItemDaoTest extends DbTest {
 					.build()
 				//@formatter:on
 		);
-		shoppingItemDao.persist(wishListItems);
+		shoppingItemDao.insert(wishListItems);
 
 	}
 
 	@Test(expected = SQLiteConstraintException.class)
 	public void insertingToNonExistingShoppingListShouldFail() {
 		final long missingShoppingListId = wishlistId - 1;
-		shoppingItemDao.persist(new ShoppingItem.Builder()//
+		shoppingItemDao.insert(new ShoppingItem.Builder()//
 				.shoppingListId(missingShoppingListId)
 				.title("iPhone 80S")
 				.created(millisOf(2017, 12, 31))
@@ -75,7 +75,7 @@ public class ShoppingItemDaoTest extends DbTest {
 		assertThat(getValue(shoppingItemDao.fetch(groceryListId)).size(), is(0));
 		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(2));
 
-		shoppingItemDao.persist(new ShoppingItem.Builder()//
+		shoppingItemDao.insert(new ShoppingItem.Builder()//
 				.shoppingListId(wishlistId)
 				.build());
 		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(3));
@@ -90,7 +90,7 @@ public class ShoppingItemDaoTest extends DbTest {
 				.title("2 Carrots")
 				.created(millisOf(2018, 1, 1))
 				.bought(true);
-		final long itemId = shoppingItemDao.persist(newShoppingItemBuilder.build());
+		final long itemId = shoppingItemDao.insert(newShoppingItemBuilder.build());
 
 		assertThat(getValue(shoppingItemDao.fetch(groceryListId)).get(0), is(newShoppingItemBuilder.id(itemId)
 				.build()));
@@ -105,7 +105,7 @@ public class ShoppingItemDaoTest extends DbTest {
 				.title("2 Carrots")
 				.created(millisOf(2018, 1, 1))
 				.bought(true);
-		final long itemId = shoppingItemDao.persist(newShoppingItemBuilder.build());
+		final long itemId = shoppingItemDao.insert(newShoppingItemBuilder.build());
 
 		assertThat(getValue(shoppingItemDao.fetch(groceryListId)).get(0), is(newShoppingItemBuilder.id(itemId)
 				.build()));
@@ -116,7 +116,7 @@ public class ShoppingItemDaoTest extends DbTest {
 				.title("3 Carrots")
 				.created(millisOf(2018, 1, 2))
 				.bought(true);
-		shoppingItemDao.persist(updatedShoppingItemBuilder.build());
+		shoppingItemDao.insert(updatedShoppingItemBuilder.build());
 
 		assertThat(getValue(shoppingItemDao.fetch(groceryListId)).get(0), is(updatedShoppingItemBuilder.build()));
 	}
@@ -129,6 +129,28 @@ public class ShoppingItemDaoTest extends DbTest {
 		shoppingListDao.remove(wishlist);
 
 		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(0));
+	}
+
+	@Test
+	public void removingShoppingItem() throws InterruptedException {
+		final List<ShoppingItem> shoppingItems = getValue(shoppingItemDao.fetch(wishlistId));
+		assertThat(shoppingItems.size(), is(2));
+
+		shoppingItemDao.remove(shoppingItems.get(0));
+
+		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(1));
+	}
+
+	@Test
+	public void archivingShoppingListShouldNotRemoveItsItems() throws InterruptedException {
+		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(2));
+
+		final ShoppingList wishlist = getValue(shoppingListDao.fetchById(wishlistId));
+		final ShoppingList updateWishlist = new ShoppingList.Builder(wishlist).archived(!wishlist.isArchived())
+				.build();
+		shoppingListDao.update(updateWishlist);
+
+		assertThat(getValue(shoppingItemDao.fetch(wishlistId)).size(), is(2));
 	}
 
 }

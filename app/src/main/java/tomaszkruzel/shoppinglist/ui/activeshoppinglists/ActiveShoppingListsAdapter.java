@@ -1,13 +1,13 @@
 package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
 import android.app.Activity;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.base.recyclerview.SingleLayoutAdapter;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.ui.shoppingitems.ShoppingItemsActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ class ActiveShoppingListsAdapter extends SingleLayoutAdapter {
 	private Activity activity;
 	private ActiveShoppingListsViewModel viewModel;
 
-	ActiveShoppingListsAdapter(@LayoutRes final int layoutId, Activity activity, ActiveShoppingListsViewModel viewModel) {
-		super(layoutId);
+	ActiveShoppingListsAdapter(Activity activity, ActiveShoppingListsViewModel viewModel) {
+		super(R.layout.item_shopping_list);
 		this.activity = activity;
 		this.viewModel = viewModel;
 	}
@@ -37,7 +37,13 @@ class ActiveShoppingListsAdapter extends SingleLayoutAdapter {
 
 	public void updateItems(final List<ShoppingList> shoppingLists) {
 		items = shoppingLists;
-		notifyDataSetChanged();
+		notifyDataSetChanged(); // TODO DiffUtil
+	}
+
+	@Override
+	protected void itemClickListener(final int adapterPosition) {
+		final ShoppingList shoppingList = items.get(adapterPosition);
+		activity.startActivity(ShoppingItemsActivity.newIntent(activity, shoppingList));
 	}
 
 	@Override
@@ -50,9 +56,12 @@ class ActiveShoppingListsAdapter extends SingleLayoutAdapter {
 					dialog.dismiss();
 					switch (which) {
 						case 0:
-							viewModel.archive(shoppingList);
+							EditShoppingListDialog.show(activity, viewModel, shoppingList);
 							break;
 						case 1:
+							viewModel.archive(shoppingList);
+							break;
+						case 2:
 							viewModel.remove(shoppingList);
 							break;
 					}

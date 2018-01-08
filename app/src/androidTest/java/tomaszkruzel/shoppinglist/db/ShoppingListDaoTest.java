@@ -53,14 +53,14 @@ public class ShoppingListDaoTest extends DbTest {
 		);
 
 		shoppingListDao = db.shoppingListDao();
-		shoppingListDao.persist(initialTestData);
+		shoppingListDao.insert(initialTestData);
 	}
 
 	@Test
 	public void fetchingActiveShoppingLists() throws InterruptedException {
 		assertThat(getValue(shoppingListDao.fetchActive()).size(), is(3));
 
-		shoppingListDao.persist(new ShoppingList.Builder()//
+		shoppingListDao.insert(new ShoppingList.Builder()//
 				.archived(false)
 				.build());
 		assertThat(getValue(shoppingListDao.fetchActive()).size(), is(4));
@@ -70,7 +70,7 @@ public class ShoppingListDaoTest extends DbTest {
 	public void fetchingArchivedShoppingLists() throws InterruptedException {
 		assertThat(getValue(shoppingListDao.fetchArchived()).size(), is(2));
 
-		shoppingListDao.persist(new ShoppingList.Builder()//
+		shoppingListDao.insert(new ShoppingList.Builder()//
 				.archived(true)
 				.build());
 		assertThat(getValue(shoppingListDao.fetchArchived()).size(), is(3));
@@ -83,7 +83,7 @@ public class ShoppingListDaoTest extends DbTest {
 				.created(DateTestUtil.millisOf(2017, 12, 30))
 				.archived(false);
 
-		final long id = shoppingListDao.persist(newShoppingListBuilder.build());
+		final long id = shoppingListDao.insert(newShoppingListBuilder.build());
 
 		assertThat(getValue(shoppingListDao.fetchById(id)), is(newShoppingListBuilder.id(id)
 				.build()));
@@ -96,7 +96,7 @@ public class ShoppingListDaoTest extends DbTest {
 				.created(DateTestUtil.millisOf(2017, 12, 30))
 				.archived(false);
 
-		final long id = shoppingListDao.persist(newShoppingListBuilder.build());
+		final long id = shoppingListDao.insert(newShoppingListBuilder.build());
 
 		final ShoppingList.Builder updatedShoppingListBuilder = new ShoppingList.Builder()//
 				.title("Friday Party")
@@ -105,7 +105,7 @@ public class ShoppingListDaoTest extends DbTest {
 				.archived(true);
 
 		final ShoppingList updatedShoppingList = updatedShoppingListBuilder.build();
-		shoppingListDao.persist(updatedShoppingList);
+		shoppingListDao.insert(updatedShoppingList);
 
 		assertThat(getValue(shoppingListDao.fetchById(id)), is(updatedShoppingList));
 	}

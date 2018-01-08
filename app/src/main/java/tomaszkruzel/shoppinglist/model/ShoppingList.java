@@ -2,12 +2,14 @@ package tomaszkruzel.shoppinglist.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Simple POJO that represents a shopping list.
  */
 @Entity
-public class ShoppingList {
+public class ShoppingList implements Parcelable {
 
 	@PrimaryKey(autoGenerate = true)
 	private final long id;
@@ -44,6 +46,37 @@ public class ShoppingList {
 	public boolean isArchived() {
 		return archived;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(final Parcel dest, final int flags) {
+		dest.writeLong(id);
+		dest.writeString(title);
+		dest.writeLong(created);
+		dest.writeByte(archived ? (byte) 1 : (byte) 0);
+	}
+
+	protected ShoppingList(Parcel in) {
+		id = in.readLong();
+		title = in.readString();
+		created = in.readLong();
+		archived = in.readByte() != 0;
+	}
+
+	public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
+
+		public ShoppingList createFromParcel(Parcel source) {
+			return new ShoppingList(source);
+		}
+
+		public ShoppingList[] newArray(int size) {
+			return new ShoppingList[size];
+		}
+	};
 
 	public static final class Builder {
 

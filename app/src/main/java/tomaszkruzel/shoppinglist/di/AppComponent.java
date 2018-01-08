@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = { AndroidInjectionModule.class, AppModule.class, ActiveShoppingListsActivityModule.class,
-		ArchiveShoppingListsActivityModule.class })
+		ArchiveShoppingListsActivityModule.class, ShoppingItemsActivityModule.class })
 public interface AppComponent {
 
 	@Component.Builder

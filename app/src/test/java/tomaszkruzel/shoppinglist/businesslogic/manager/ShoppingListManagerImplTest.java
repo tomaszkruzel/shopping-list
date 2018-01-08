@@ -39,7 +39,7 @@ public class ShoppingListManagerImplTest {
 		shoppingListManager.addShoppingList(title);
 
 		final ArgumentCaptor<ShoppingList> captor = ArgumentCaptor.forClass(ShoppingList.class);
-		verify(shoppingListDao).persist(captor.capture());
+		verify(shoppingListDao).insert(captor.capture());
 
 		final ShoppingList shoppingList = captor.getValue();
 		assertThat(shoppingList.getTitle(), is(title));
@@ -59,7 +59,7 @@ public class ShoppingListManagerImplTest {
 		shoppingListManager.archive(shoppingList);
 
 		final ArgumentCaptor<ShoppingList> captor = ArgumentCaptor.forClass(ShoppingList.class);
-		verify(shoppingListDao).persist(captor.capture());
+		verify(shoppingListDao).update(captor.capture());
 
 		final ShoppingList modifiedShoppingList = new ShoppingList.Builder(shoppingList)//
 				.archived(true)
@@ -79,7 +79,7 @@ public class ShoppingListManagerImplTest {
 		shoppingListManager.unarchive(shoppingList);
 
 		final ArgumentCaptor<ShoppingList> captor = ArgumentCaptor.forClass(ShoppingList.class);
-		verify(shoppingListDao).persist(captor.capture());
+		verify(shoppingListDao).update(captor.capture());
 
 		final ShoppingList modifiedShoppingList = new ShoppingList.Builder(shoppingList)//
 				.archived(false)
@@ -102,5 +102,26 @@ public class ShoppingListManagerImplTest {
 		verify(shoppingListDao).remove(captor.capture());
 
 		assertThat(captor.getValue(), is(shoppingList));
+	}
+
+	@Test
+	public void editShoppingItemTitle() {
+		final ShoppingList shoppingList = new ShoppingList.Builder()//
+				.id(12)
+				.title("2017 wishlist")
+				.created(januaryFirst)
+				.archived(true)
+				.build();
+
+		final String newTitle = "2017 dreams";
+		shoppingListManager.editShoppingItemTitle(shoppingList, newTitle);
+
+		final ArgumentCaptor<ShoppingList> captor = ArgumentCaptor.forClass(ShoppingList.class);
+		verify(shoppingListDao).update(captor.capture());
+
+		final ShoppingList modifiedShoppingList = new ShoppingList.Builder(shoppingList)//
+				.title(newTitle)
+				.build();
+		assertThat(captor.getValue(), is(modifiedShoppingList));
 	}
 }

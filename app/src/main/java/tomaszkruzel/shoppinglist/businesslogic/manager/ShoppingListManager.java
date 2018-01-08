@@ -12,4 +12,6 @@ public interface ShoppingListManager {
 	void remove(@NonNull ShoppingList shoppingList);
 
 	void unarchive(ShoppingList shoppingList);
+
+	void editShoppingItemTitle(ShoppingList shoppingList, String title);
 }

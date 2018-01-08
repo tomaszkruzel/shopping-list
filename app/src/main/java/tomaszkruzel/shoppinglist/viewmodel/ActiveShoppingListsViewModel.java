@@ -54,4 +54,8 @@ public class ActiveShoppingListsViewModel extends ViewModel {
 	public void changeSortingOrder() {
 		fromOldestToLatest.setValue(!fromOldestToLatest.getValue());
 	}
+
+	public void editShoppingListTitle(final ShoppingList shoppingList, final String title) {
+		shoppingListManager.editShoppingItemTitle(shoppingList, title);
+	}
 }

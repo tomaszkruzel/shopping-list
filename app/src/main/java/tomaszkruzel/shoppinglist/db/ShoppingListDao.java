@@ -19,12 +19,14 @@ public interface ShoppingListDao {
 	LiveData<ShoppingList> fetchById(long id);
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	long persist(ShoppingList shoppingList);
+	long insert(ShoppingList shoppingList);
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	void persist(List<ShoppingList> shoppingList);
+	void insert(List<ShoppingList> shoppingList);
+
+	@Update
+	void update(ShoppingList shoppingList);
 
 	@Delete
 	void remove(ShoppingList shoppingList);
-
 }

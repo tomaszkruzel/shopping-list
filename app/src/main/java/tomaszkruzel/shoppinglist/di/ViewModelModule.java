@@ -24,6 +24,7 @@ import dagger.multibindings.IntoMap;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 import tomaszkruzel.shoppinglist.viewmodel.AppViewModelFactory;
 import tomaszkruzel.shoppinglist.viewmodel.ArchivedShoppingListsViewModel;
+import tomaszkruzel.shoppinglist.viewmodel.ShoppingItemsViewModel;
 
 @Module
 abstract class ViewModelModule {
@@ -37,6 +38,11 @@ abstract class ViewModelModule {
 	@IntoMap
 	@ViewModelKey(ArchivedShoppingListsViewModel.class)
 	abstract ViewModel bindArchivedShoppingListsViewModel(ArchivedShoppingListsViewModel archivedShoppingListsViewModel);
+
+	@Binds
+	@IntoMap
+	@ViewModelKey(ShoppingItemsViewModel.class)
+	abstract ViewModel bindShoppingItemsViewModel(ShoppingItemsViewModel shoppingItemsViewModel);
 
 	@Binds
 	abstract ViewModelProvider.Factory bindViewModelFactory(AppViewModelFactory factory);

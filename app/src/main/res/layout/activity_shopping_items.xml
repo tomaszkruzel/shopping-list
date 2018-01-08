@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tomaszkruzel.shoppinglist.ui.activeshoppinglists.ActiveShoppingListsActivity">
+    tools:context="tomaszkruzel.shoppinglist.ui.shoppingitems.ShoppingItemsActivity">
 
     <include layout="@layout/layout_appbar"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/active_shoppping_lists"
+        android:id="@+id/shopping_items"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -21,11 +21,11 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:onClick="addList"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

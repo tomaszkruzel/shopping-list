@@ -34,7 +34,7 @@ public class ShoppingListManagerImpl implements ShoppingListManager {
 							.title(title)
 							.archived(false)
 							.build();
-					shoppingListDao.persist(shoppingList);
+					shoppingListDao.insert(shoppingList);
 				});
 	}
 
@@ -45,7 +45,7 @@ public class ShoppingListManagerImpl implements ShoppingListManager {
 					final ShoppingList updatedShoppingList = new ShoppingList.Builder(shoppingList)//
 							.archived(true)
 							.build();
-					shoppingListDao.persist(updatedShoppingList);
+					shoppingListDao.update(updatedShoppingList);
 				});
 	}
 
@@ -62,7 +62,18 @@ public class ShoppingListManagerImpl implements ShoppingListManager {
 					final ShoppingList updatedShoppingList = new ShoppingList.Builder(shoppingList)//
 							.archived(false)
 							.build();
-					shoppingListDao.persist(updatedShoppingList);
+					shoppingListDao.update(updatedShoppingList);
+				});
+	}
+
+	@Override
+	public void editShoppingItemTitle(final ShoppingList shoppingList, final String title) {
+		appExecutors.diskIO()
+				.execute(() -> {
+					final ShoppingList updatedShoppingList = new ShoppingList.Builder(shoppingList)//
+							.title(title)
+							.build();
+					shoppingListDao.update(updatedShoppingList);
 				});
 	}
 }

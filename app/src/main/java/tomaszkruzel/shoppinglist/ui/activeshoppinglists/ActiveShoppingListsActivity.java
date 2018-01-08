@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.ui.archivedshoppinglists.ArchivedShoppingListsActivity;
@@ -38,7 +39,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 		viewModel = ViewModelProviders.of(this, viewModelFactory)
 				.get(ActiveShoppingListsViewModel.class);
 
-		adapter = new ActiveShoppingListsAdapter(R.layout.item_shopping_list, this, viewModel);
+		adapter = new ActiveShoppingListsAdapter(this, viewModel);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
@@ -66,7 +67,12 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_sort:
-				viewModel.changeSortingOrder();
+				if (adapter.getItemCount() > 1) {
+					viewModel.changeSortingOrder();
+				} else {
+					Toast.makeText(this, R.string.nothing_to_sort, Toast.LENGTH_SHORT)
+							.show();
+				}
 				return true;
 			case R.id.action_go_to_archive:
 				startActivity(new Intent(this, ArchivedShoppingListsActivity.class));

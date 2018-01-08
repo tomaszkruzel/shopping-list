@@ -1,17 +1,24 @@
 <resources>
     <string name="app_name">Shopping List</string>
 
-    <!-- Active Shopping Lists START -->
-    <string name="title_active_shopping_lists">Current lists</string>
+    <!-- Common START -->
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
+    <string name="dialog_save">Save</string>
+    <string name="change_sorting_order">Change sorting order</string>
+    <string name="nothing_to_sort">Sorting works for minimum two items</string>
+    <!-- Common END -->
+
+    <!-- Active Shopping Lists START -->
+    <string name="title_active_shopping_lists">Current lists</string>
     <string name="dialog_title_add_list">Add list</string>
+    <string name="dialog_title_edit_list">Edit list</string>
     <string name="dialog_list_name">List name</string>
     <string-array name="active_shopping_list_options">
+        <item>Edit</item>
         <item>Archive</item>
         <item>Remove</item>
     </string-array>
-    <string name="change_sorting_order">Change sorting order</string>
     <string name="go_to_archive">Archive</string>
     <!-- Active Shopping Lists END -->
 
@@ -22,5 +29,16 @@
         <item>Remove</item>
     </string-array>
     <!-- Archived Shopping Lists END -->
+
+    <!-- Shopping Items START -->
+    <string name="dialog_title_add_item">Add item</string>
+    <string name="dialog_item_name">Item name</string>
+    <string name="dialog_title_edit_item">Edit item</string>
+    <string name="archived_suffix">\u00A0(Archived)</string>
+    <string-array name="shopping_item_options">
+        <item>Edit</item>
+        <item>Remove</item>
+    </string-array>
+    <!-- Shopping Items END -->
 
 </resources>

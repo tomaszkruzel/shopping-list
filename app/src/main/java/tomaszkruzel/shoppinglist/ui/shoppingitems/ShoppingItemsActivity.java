@@ -1,55 +1,80 @@
-package tomaszkruzel.shoppinglist.ui.archivedshoppinglists;
+package tomaszkruzel.shoppinglist.ui.shoppingitems;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
-import tomaszkruzel.shoppinglist.viewmodel.ArchivedShoppingListsViewModel;
+import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.viewmodel.ShoppingItemsViewModel;
 
 import javax.inject.Inject;
 
-public class ArchivedShoppingListsActivity extends AppCompatActivity {
+public class ShoppingItemsActivity extends AppCompatActivity {
+
+	private static final String SHOPPING_LIST_KEY = "shopping_list";
+	private View addItem;
+
+	public static Intent newIntent(Context context, ShoppingList shoppingList) {
+		final Intent intent = new Intent(context, ShoppingItemsActivity.class);
+		intent.putExtra(SHOPPING_LIST_KEY, shoppingList);
+		return intent;
+	}
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
 
-	private ArchivedShoppingListsViewModel viewModel;
+	private ShoppingItemsViewModel viewModel;
 	private RecyclerView recyclerView;
-	private ArchivedShoppingListsAdapter adapter;
+	private ShoppingItemsAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_archived_shopping_lists);
+		setContentView(R.layout.activity_shopping_items);
 		initToolbar();
 		initViews();
 
-		viewModel = ViewModelProviders.of(this, viewModelFactory)
-				.get(ArchivedShoppingListsViewModel.class);
+		final ShoppingList shoppingList = getIntent().getParcelableExtra(SHOPPING_LIST_KEY);
+		setTitle(getTitle(shoppingList));
 
-		adapter = new ArchivedShoppingListsAdapter(this, viewModel);
+		viewModel = ViewModelProviders.of(this, viewModelFactory)
+				.get(ShoppingItemsViewModel.class);
+		viewModel.init(shoppingList.getId());
+
+		adapter = new ShoppingItemsAdapter(shoppingList.isArchived(), this, viewModel);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-		viewModel.getArchivedShoppingLists()
-				.observe(this, shoppingLists -> {
-					if (shoppingLists != null) {
-						adapter.updateItems(shoppingLists);
+		addItem.setVisibility(shoppingList.isArchived() ? View.GONE : View.VISIBLE);
+		addItem.setOnClickListener(v -> AddShoppingItemDialog.show(this, viewModel));
+
+		viewModel.getShoppingItems()
+				.observe(this, shoppingItems -> {
+					if (shoppingItems != null) {
+						adapter.updateItems(shoppingItems);
 					}
 				});
 	}
 
+	@NonNull
+	private String getTitle(final ShoppingList shoppingList) {
+		return shoppingList.getTitle() + (shoppingList.isArchived() ? getString(R.string.archived_suffix) : "");
+	}
+
 	private void initToolbar() {
-		setTitle(R.string.title_archived_shopping_lists);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,6 +106,7 @@ public class ArchivedShoppingListsActivity extends AppCompatActivity {
 	}
 
 	private void initViews() {
-		recyclerView = findViewById(R.id.archived_shoppping_lists);
+		recyclerView = findViewById(R.id.shopping_items);
+		addItem = findViewById(R.id.add_item);
 	}
 }

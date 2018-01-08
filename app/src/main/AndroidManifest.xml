@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.archivedshoppinglists.ArchivedShoppingListsActivity"/>
+        <activity android:name=".ui.shoppingitems.ShoppingItemsActivity"/>
     </application>
 
 </manifest>
