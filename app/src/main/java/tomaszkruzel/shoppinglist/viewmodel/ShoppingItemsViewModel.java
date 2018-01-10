@@ -5,10 +5,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
-import tomaszkruzel.shoppinglist.businesslogic.comparators.shoppingitem.ShoppingItemCreatedComparator;
 import tomaszkruzel.shoppinglist.businesslogic.manager.ShoppingItemManager;
 import tomaszkruzel.shoppinglist.db.ShoppingItemDao;
 import tomaszkruzel.shoppinglist.model.ShoppingItem;
+import tomaszkruzel.shoppinglist.model.ShoppingItemSortingOption;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -19,18 +19,16 @@ public class ShoppingItemsViewModel extends ViewModel {
 
 	private final ShoppingItemManager shoppingItemManager;
 	private final LiveData<List<ShoppingItem>> shoppingItems;
-	private final MutableLiveData<Boolean> fromOldestToLatest = new MutableLiveData<>();
+	private final MutableLiveData<Comparator<ShoppingItem>> listComparator = new MutableLiveData<>();
 	private long shoppingListId;
-	private ShoppingItemCreatedComparator ascending = new ShoppingItemCreatedComparator();
-	private Comparator<ShoppingItem> descending = Collections.reverseOrder(new ShoppingItemCreatedComparator());
 
 	@Inject
 	public ShoppingItemsViewModel(final ShoppingItemDao shoppingItemDao, final ShoppingItemManager shoppingItemManager) {
 		this.shoppingItemManager = shoppingItemManager;
-		fromOldestToLatest.setValue(true);
-		shoppingItems = Transformations.switchMap(fromOldestToLatest, value -> {
+		listComparator.setValue(ShoppingItemSortingOption.OLDEST_TO_NEWEST.getComparator());
+		shoppingItems = Transformations.switchMap(listComparator, value -> {
 			return Transformations.map(shoppingItemDao.fetch(shoppingListId), list -> {
-				Collections.sort(list, value ? ascending : descending);
+				Collections.sort(list, value);
 				return list;
 			});
 		});
@@ -60,7 +58,7 @@ public class ShoppingItemsViewModel extends ViewModel {
 		shoppingItemManager.remove(shoppingItem);
 	}
 
-	public void changeSortingOrder() {
-		fromOldestToLatest.setValue(!fromOldestToLatest.getValue());
+	public void changeSortingOption(ShoppingItemSortingOption option) {
+		listComparator.setValue(option.getComparator());
 	}
 }

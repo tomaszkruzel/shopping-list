@@ -2,12 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_sort"
-        android:icon="@drawable/ic_time"
-        android:title="@string/change_sorting_order"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_go_to_archive"
         android:icon="@drawable/ic_archive"
         android:title="@string/go_to_archive"

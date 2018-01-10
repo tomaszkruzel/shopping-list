@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
@@ -28,6 +30,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 
 	private ActiveShoppingListsViewModel viewModel;
 	private RecyclerView recyclerView;
+	private View sortingOptions;
 	private ActiveShoppingListsAdapter adapter;
 
 	@Override
@@ -49,6 +52,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 				.observe(this, shoppingLists -> {
 					if (shoppingLists != null) {
 						adapter.updateItems(shoppingLists);
+						sortingOptions.setVisibility(shoppingLists.size() > 1 ? View.VISIBLE : View.GONE);
 					}
 				});
 	}
@@ -68,14 +72,6 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_sort:
-				if (adapter.getItemCount() > 1) {
-					viewModel.changeSortingOrder();
-				} else {
-					Toast.makeText(this, R.string.nothing_to_sort, Toast.LENGTH_SHORT)
-							.show();
-				}
-				return true;
 			case R.id.action_go_to_archive:
 				startActivity(new Intent(this, ArchivedShoppingListsActivity.class));
 				return true;
@@ -86,6 +82,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 
 	private void initViews() {
 		recyclerView = findViewById(R.id.active_shoppping_lists);
+		sortingOptions = findViewById(R.id.sorting_options);
 	}
 
 	public void addList(View view) {
@@ -100,5 +97,23 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 	@Override
 	public void editShoppingListTitle(final ShoppingList shoppingList, final String title) {
 		viewModel.editShoppingListTitle(shoppingList, title);
+	}
+
+	public void showSortingOptions(View view) {
+		final ListAdapter listAdapter = new ArrayAdapter<>(this, R.layout.item_dialog_text_row,
+				getResources().getStringArray(R.array.dialog_sorting_shopping_lists));
+		new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_sorting_options))
+				.setSingleChoiceItems(listAdapter, -1, (dialog, which) -> {
+					dialog.dismiss();
+					switch (which) {
+						case 0:
+							viewModel.changeSortingOrder(true);
+							break;
+						case 1:
+							viewModel.changeSortingOrder(false);
+							break;
+					}
+				})
+				.show();
 	}
 }

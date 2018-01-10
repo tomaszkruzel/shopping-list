@@ -5,8 +5,19 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
     <string name="dialog_save">Save</string>
-    <string name="change_sorting_order">Change sorting order</string>
-    <string name="nothing_to_sort">Sorting works for minimum two items</string>
+    <string name="dialog_sorting_options">Sorting options</string>
+    <string-array name="dialog_sorting_shopping_lists">
+        <item>Oldest -> Newest</item>
+        <item>Newest -> Oldest</item>
+    </string-array>
+    <string-array name="dialog_sorting_shopping_items">
+        <item>Oldest -> Newest</item>
+        <item>Newest -> Oldest</item>
+        <item>Not bought first, Oldest -> Newest</item>
+        <item>Not bought first, Newest -> Oldest</item>
+        <item>Bought first, Oldest -> Newest</item>
+        <item>Bought first, Newest -> Oldest</item>
+    </string-array>
     <!-- Common END -->
 
     <!-- Active Shopping Lists START -->

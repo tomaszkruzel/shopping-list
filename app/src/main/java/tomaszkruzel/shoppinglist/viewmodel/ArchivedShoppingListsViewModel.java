@@ -47,7 +47,7 @@ public class ArchivedShoppingListsViewModel extends ViewModel {
 		shoppingListManager.remove(shoppingList);
 	}
 
-	public void changeSortingOrder() {
-		fromOldestToLatest.setValue(!fromOldestToLatest.getValue());
+	public void changeSortingOrder(boolean fromOldestToLatest) {
+		this.fromOldestToLatest.setValue(fromOldestToLatest);
 	}
 }
