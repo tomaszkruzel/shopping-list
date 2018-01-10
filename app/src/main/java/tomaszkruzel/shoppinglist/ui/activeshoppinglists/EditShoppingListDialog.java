@@ -1,57 +1,71 @@
 package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import butterknife.ButterKnife;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 import tomaszkruzel.shoppinglist.utils.text.EditTextUtils;
 import tomaszkruzel.shoppinglist.utils.text.NonEmptyTextWatcher;
-import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 
-class EditShoppingListDialog extends AlertDialog {
+public class EditShoppingListDialog extends DialogFragment {
 
-	protected EditShoppingListDialog(@NonNull final Context context) {
-		super(context);
+	private static final String SHOPPING_LIST_KEY = "SHOPPING_LIST_KEY";
+
+	interface EditShoppingListListener {
+
+		void editShoppingListTitle(ShoppingList shoppingList, String title);
 	}
 
-	protected EditShoppingListDialog(@NonNull final Context context, @StyleRes final int themeResId) {
-		super(context, themeResId);
+	@SuppressLint("ValidFragment")
+	protected EditShoppingListDialog() {
 	}
 
-	protected EditShoppingListDialog(@NonNull final Context context, final boolean cancelable, @Nullable final OnCancelListener cancelListener) {
-		super(context, cancelable, cancelListener);
+	public static EditShoppingListDialog newInstance(@NonNull final ShoppingList shoppingList) {
+		final Bundle args = new Bundle();
+		args.putParcelable(SHOPPING_LIST_KEY, shoppingList);
+		EditShoppingListDialog fragment = new EditShoppingListDialog();
+		fragment.setArguments(args);
+		return fragment;
 	}
 
-	public static AlertDialog show(Activity activity, ActiveShoppingListsViewModel viewModel, ShoppingList shoppingList) {
+	@Override
+	public void onAttach(final Context context) {
+		super.onAttach(context);
+		if (!(getActivity() instanceof EditShoppingListListener)) {
+			throw new IllegalStateException("Parent activity should be an instance of " + EditShoppingListListener.class);
+		}
+	}
 
-		final EditShoppingListDialog dialog = new EditShoppingListDialog(activity);
-		final LayoutInflater inflater = LayoutInflater.from(activity);
-		View dialogView = inflater.inflate(R.layout.dialog_edit_shopping_list, null);
-		dialog.setView(dialogView);
-		dialog.show();
+	@Nullable
+	@Override
+	public View onCreateView(final LayoutInflater inflater,
+			@Nullable final ViewGroup container,
+			@Nullable final Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.dialog_edit_shopping_list, container, false);
+		final ShoppingList shoppingList = getArguments().getParcelable(SHOPPING_LIST_KEY);
 
-		final View saveButton = ButterKnife.findById(dialog, R.id.save_button);
-		final EditText itemName = ButterKnife.findById(dialog, R.id.item_name);
+		final View saveButton = view.findViewById(R.id.save_button);
+		final EditText itemName = view.findViewById(R.id.item_name);
 		itemName.addTextChangedListener(new NonEmptyTextWatcher(isEmpty -> saveButton.setEnabled(!isEmpty)));
 		EditTextUtils.setText(itemName, shoppingList.getTitle());
 
-		saveButton.setOnClickListener(view -> {
-			dialog.dismiss();
-			viewModel.editShoppingListTitle(shoppingList, itemName.getText()
+		saveButton.setOnClickListener(v -> {
+			dismiss();
+			((EditShoppingListListener) getActivity()).editShoppingListTitle(shoppingList, itemName.getText()
 					.toString());
 		});
 
-		ButterKnife.findById(dialog, R.id.cancel_button)
-				.setOnClickListener((View view) -> dialog.dismiss());
+		view.findViewById(R.id.cancel_button)
+				.setOnClickListener(v -> dismiss());
 
-		return dialog;
+		return view;
 	}
 }

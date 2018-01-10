@@ -16,12 +16,14 @@ import android.view.View;
 import android.widget.Toast;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
+import tomaszkruzel.shoppinglist.model.ShoppingItem;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
 import tomaszkruzel.shoppinglist.viewmodel.ShoppingItemsViewModel;
 
 import javax.inject.Inject;
 
-public class ShoppingItemsActivity extends AppCompatActivity {
+public class ShoppingItemsActivity extends AppCompatActivity
+		implements AddShoppingItemDialog.AddShoppingItemListener, EditShoppingItemDialog.EditShoppingItemListener {
 
 	private static final String SHOPPING_LIST_KEY = "shopping_list";
 	private View addItem;
@@ -59,7 +61,8 @@ public class ShoppingItemsActivity extends AppCompatActivity {
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 		addItem.setVisibility(shoppingList.isArchived() ? View.GONE : View.VISIBLE);
-		addItem.setOnClickListener(v -> AddShoppingItemDialog.show(this, viewModel));
+		addItem.setOnClickListener(
+				v -> new AddShoppingItemDialog().show(getSupportFragmentManager(), AddShoppingItemDialog.class.getSimpleName()));
 
 		viewModel.getShoppingItems()
 				.observe(this, shoppingItems -> {
@@ -108,5 +111,15 @@ public class ShoppingItemsActivity extends AppCompatActivity {
 	private void initViews() {
 		recyclerView = findViewById(R.id.shopping_items);
 		addItem = findViewById(R.id.add_item);
+	}
+
+	@Override
+	public void addShoppingItem(final String title) {
+		viewModel.addShoppingItem(title);
+	}
+
+	@Override
+	public void editShoppingItemTitle(final ShoppingItem shoppingItem, final String title) {
+		viewModel.editShoppingItemTitle(shoppingItem, title);
 	}
 }

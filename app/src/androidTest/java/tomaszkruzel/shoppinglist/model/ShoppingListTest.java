@@ -1,10 +1,9 @@
-package tomaszkruzel.shoppinglist.tomaszkruzel.shoppinglist.model;
+package tomaszkruzel.shoppinglist.model;
 
 import android.os.Parcel;
 import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import tomaszkruzel.shoppinglist.model.ShoppingList;
 
 import static junit.framework.Assert.assertEquals;
 import static tomaszkruzel.shoppinglist.testutils.DateTestUtil.januaryFirst;
@@ -14,7 +13,8 @@ public class ShoppingListTest {
 
 	@Test
 	public void toAndFromParcel() {
-		final ShoppingList shoppingList = new ShoppingList.Builder().id(123l)
+		final ShoppingList shoppingList = new ShoppingList.Builder()//
+				.id(123L)
 				.title("title")
 				.created(januaryFirst)
 				.archived(true)

@@ -1,7 +1,7 @@
 package tomaszkruzel.shoppinglist.ui.shoppingitems;
 
-import android.app.Activity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import tomaszkruzel.shoppinglist.R;
@@ -16,10 +16,10 @@ class ShoppingItemsAdapter extends SingleLayoutAdapter {
 
 	private List<ShoppingItem> items = new ArrayList<>();
 	private boolean isArchivedList;
-	private Activity activity;
+	private AppCompatActivity activity;
 	private ShoppingItemsViewModel viewModel;
 
-	ShoppingItemsAdapter(boolean isArchivedList, Activity activity, ShoppingItemsViewModel viewModel) {
+	ShoppingItemsAdapter(boolean isArchivedList, AppCompatActivity activity, ShoppingItemsViewModel viewModel) {
 		super(R.layout.item_shopping_item);
 		this.isArchivedList = isArchivedList;
 		this.activity = activity;
@@ -60,7 +60,8 @@ class ShoppingItemsAdapter extends SingleLayoutAdapter {
 						dialog.dismiss();
 						switch (which) {
 							case 0:
-								EditShoppingItemDialog.show(activity, viewModel, shoppingItem);
+								EditShoppingItemDialog.newInstance(shoppingItem)
+										.show(activity.getSupportFragmentManager(), EditShoppingItemDialog.class.getSimpleName());
 								break;
 							case 1:
 								viewModel.remove(shoppingItem);

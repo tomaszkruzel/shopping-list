@@ -14,12 +14,14 @@ import android.view.View;
 import android.widget.Toast;
 import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
+import tomaszkruzel.shoppinglist.model.ShoppingList;
 import tomaszkruzel.shoppinglist.ui.archivedshoppinglists.ArchivedShoppingListsActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 
 import javax.inject.Inject;
 
-public class ActiveShoppingListsActivity extends AppCompatActivity {
+public class ActiveShoppingListsActivity extends AppCompatActivity
+		implements AddListDialog.AddShoppingListListener, EditShoppingListDialog.EditShoppingListListener {
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
@@ -87,6 +89,16 @@ public class ActiveShoppingListsActivity extends AppCompatActivity {
 	}
 
 	public void addList(View view) {
-		AddListDialog.show(this, viewModel);
+		new AddListDialog().show(getSupportFragmentManager(), AddListDialog.class.getSimpleName());
+	}
+
+	@Override
+	public void addShoppingList(final String title) {
+		viewModel.addShoppingList(title);
+	}
+
+	@Override
+	public void editShoppingListTitle(final ShoppingList shoppingList, final String title) {
+		viewModel.editShoppingListTitle(shoppingList, title);
 	}
 }

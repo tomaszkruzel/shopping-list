@@ -1,7 +1,7 @@
 package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
-import android.app.Activity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import tomaszkruzel.shoppinglist.R;
@@ -16,10 +16,10 @@ import java.util.List;
 class ActiveShoppingListsAdapter extends SingleLayoutAdapter {
 
 	private List<ShoppingList> items = new ArrayList<>();
-	private Activity activity;
+	private AppCompatActivity activity;
 	private ActiveShoppingListsViewModel viewModel;
 
-	ActiveShoppingListsAdapter(Activity activity, ActiveShoppingListsViewModel viewModel) {
+	ActiveShoppingListsAdapter(AppCompatActivity activity, ActiveShoppingListsViewModel viewModel) {
 		super(R.layout.item_shopping_list);
 		this.activity = activity;
 		this.viewModel = viewModel;
@@ -56,7 +56,8 @@ class ActiveShoppingListsAdapter extends SingleLayoutAdapter {
 					dialog.dismiss();
 					switch (which) {
 						case 0:
-							EditShoppingListDialog.show(activity, viewModel, shoppingList);
+							EditShoppingListDialog.newInstance(shoppingList)
+									.show(activity.getSupportFragmentManager(), EditShoppingListDialog.class.getSimpleName());
 							break;
 						case 1:
 							viewModel.archive(shoppingList);

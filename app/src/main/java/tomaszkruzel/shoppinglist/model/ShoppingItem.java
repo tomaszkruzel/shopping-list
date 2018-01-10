@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Simple POJO that represents item on the shopping list.
@@ -13,7 +15,7 @@ import android.arch.persistence.room.PrimaryKey;
 								  childColumns = "shoppingListId",
 								  onUpdate = ForeignKey.CASCADE,
 								  onDelete = ForeignKey.CASCADE))
-public class ShoppingItem {
+public class ShoppingItem implements Parcelable {
 
 	@PrimaryKey(autoGenerate = true)
 	private final long id;
@@ -30,6 +32,41 @@ public class ShoppingItem {
 		this.created = created;
 		this.bought = bought;
 	}
+
+	protected ShoppingItem(Parcel in) {
+		id = in.readLong();
+		shoppingListId = in.readLong();
+		title = in.readString();
+		created = in.readLong();
+		bought = in.readByte() != 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(id);
+		dest.writeLong(shoppingListId);
+		dest.writeString(title);
+		dest.writeLong(created);
+		dest.writeByte((byte) (bought ? 1 : 0));
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Creator<ShoppingItem> CREATOR = new Creator<ShoppingItem>() {
+
+		@Override
+		public ShoppingItem createFromParcel(Parcel in) {
+			return new ShoppingItem(in);
+		}
+
+		@Override
+		public ShoppingItem[] newArray(int size) {
+			return new ShoppingItem[size];
+		}
+	};
 
 	public long getId() {
 		return id;

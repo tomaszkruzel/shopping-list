@@ -1,54 +1,54 @@
 package tomaszkruzel.shoppinglist.ui.shoppingitems;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import butterknife.ButterKnife;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.utils.text.NonEmptyTextWatcher;
-import tomaszkruzel.shoppinglist.viewmodel.ShoppingItemsViewModel;
 
-class AddShoppingItemDialog extends AlertDialog {
+public class AddShoppingItemDialog extends DialogFragment {
 
-	protected AddShoppingItemDialog(@NonNull final Context context) {
-		super(context);
+	interface AddShoppingItemListener {
+
+		void addShoppingItem(String title);
 	}
 
-	protected AddShoppingItemDialog(@NonNull final Context context, @StyleRes final int themeResId) {
-		super(context, themeResId);
+	public AddShoppingItemDialog() {
 	}
 
-	protected AddShoppingItemDialog(@NonNull final Context context, final boolean cancelable, @Nullable final OnCancelListener cancelListener) {
-		super(context, cancelable, cancelListener);
+	@Override
+	public void onAttach(final Context context) {
+		super.onAttach(context);
+		if (!(getActivity() instanceof AddShoppingItemListener)) {
+			throw new IllegalStateException("Parent activity should be an instance of " + AddShoppingItemListener.class);
+		}
 	}
 
-	public static AlertDialog show(Activity activity, ShoppingItemsViewModel viewModel) {
+	@Nullable
+	@Override
+	public View onCreateView(final LayoutInflater inflater,
+			@Nullable final ViewGroup container,
+			@Nullable final Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.dialog_add_shopping_item, container, false);
 
-		final AddShoppingItemDialog dialog = new AddShoppingItemDialog(activity);
-		final LayoutInflater inflater = LayoutInflater.from(activity);
-		View dialogView = inflater.inflate(R.layout.dialog_add_shopping_item, null);
-		dialog.setView(dialogView);
-		dialog.show();
-
-		final View addButton = ButterKnife.findById(dialog, R.id.add_button);
-		final EditText itemName = ButterKnife.findById(dialog, R.id.item_name);
+		final View addButton = view.findViewById(R.id.add_button);
+		final EditText itemName = view.findViewById(R.id.item_name);
 		itemName.addTextChangedListener(new NonEmptyTextWatcher(isEmpty -> addButton.setEnabled(!isEmpty)));
 
-		addButton.setOnClickListener(view -> {
-			dialog.dismiss();
-			viewModel.addShoppingItem(itemName.getText()
+		addButton.setOnClickListener(v -> {
+			dismiss();
+			((AddShoppingItemListener) getActivity()).addShoppingItem(itemName.getText()
 					.toString());
 		});
 
-		ButterKnife.findById(dialog, R.id.cancel_button)
-				.setOnClickListener((View view) -> dialog.dismiss());
+		view.findViewById(R.id.cancel_button)
+				.setOnClickListener(v -> dismiss());
 
-		return dialog;
+		return view;
 	}
 }
