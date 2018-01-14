@@ -1,14 +1,15 @@
 package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
@@ -44,12 +45,11 @@ public class EditShoppingListDialog extends DialogFragment {
 		}
 	}
 
-	@Nullable
 	@Override
-	public View onCreateView(final LayoutInflater inflater,
-			@Nullable final ViewGroup container,
-			@Nullable final Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.dialog_edit_shopping_list, container, false);
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		final LayoutInflater inflater = getActivity().getLayoutInflater();
+		final View view = inflater.inflate(R.layout.dialog_edit_shopping_list, null);
+
 		final ShoppingList shoppingList = getArguments().getParcelable(SHOPPING_LIST_KEY);
 
 		final View saveButton = view.findViewById(R.id.save_button);
@@ -66,6 +66,13 @@ public class EditShoppingListDialog extends DialogFragment {
 		view.findViewById(R.id.cancel_button)
 				.setOnClickListener(v -> dismiss());
 
-		return view;
+		final AlertDialog dialog = new AlertDialog.Builder(getActivity())//
+				.setView(view)
+				.create();
+
+		dialog.getWindow()
+				.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+		return dialog;
 	}
 }

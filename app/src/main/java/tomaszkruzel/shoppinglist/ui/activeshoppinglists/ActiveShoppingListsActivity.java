@@ -23,7 +23,7 @@ import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
 import javax.inject.Inject;
 
 public class ActiveShoppingListsActivity extends AppCompatActivity
-		implements AddListDialog.AddShoppingListListener, EditShoppingListDialog.EditShoppingListListener {
+		implements AddShoppingListDialog.AddShoppingListListener, EditShoppingListDialog.EditShoppingListListener {
 
 	@Inject
 	ViewModelProvider.Factory viewModelFactory;
@@ -86,7 +86,7 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 	}
 
 	public void addList(View view) {
-		new AddListDialog().show(getSupportFragmentManager(), AddListDialog.class.getSimpleName());
+		new AddShoppingListDialog().show(getSupportFragmentManager(), AddShoppingListDialog.class.getSimpleName());
 	}
 
 	@Override
