@@ -10,7 +10,7 @@ import tomaszkruzel.shoppinglist.db.ShoppingListDao;
 
 import javax.inject.Singleton;
 
-@Module(includes = { ViewModelModule.class, BusinessLogicModule.class })
+@Module(includes = { BusinessLogicModule.class })
 class AppModule {
 
 	@Singleton

@@ -1,13 +1,11 @@
 package tomaszkruzel.shoppinglist.ui.shoppingitems;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,19 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.model.ShoppingItem;
 import tomaszkruzel.shoppinglist.model.ShoppingItemSortingOption;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.ui.BaseDaggerAppCompatActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ShoppingItemsViewModel;
+import tomaszkruzel.shoppinglist.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-public class ShoppingItemsActivity extends AppCompatActivity
+public class ShoppingItemsActivity extends BaseDaggerAppCompatActivity
 		implements AddShoppingItemDialog.AddShoppingItemListener, EditShoppingItemDialog.EditShoppingItemListener {
 
-	private static final String SHOPPING_LIST_KEY = "shopping_list";
+	public static final String SHOPPING_LIST_KEY = "shopping_list";
 
 	public static Intent newIntent(Context context, ShoppingList shoppingList) {
 		final Intent intent = new Intent(context, ShoppingItemsActivity.class);
@@ -36,7 +36,11 @@ public class ShoppingItemsActivity extends AppCompatActivity
 	}
 
 	@Inject
-	ViewModelProvider.Factory viewModelFactory;
+	ViewModelFactory<ShoppingItemsViewModel> viewModelFactory;
+
+	@Inject
+	@Named(ShoppingItemsActivity.SHOPPING_LIST_KEY)
+	ShoppingList shoppingList;
 
 	private ShoppingItemsViewModel viewModel;
 	private RecyclerView recyclerView;
@@ -46,18 +50,15 @@ public class ShoppingItemsActivity extends AppCompatActivity
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shopping_items);
 		initToolbar();
 		initViews();
 
-		final ShoppingList shoppingList = getIntent().getParcelableExtra(SHOPPING_LIST_KEY);
 		setTitle(getTitle(shoppingList));
 
 		viewModel = ViewModelProviders.of(this, viewModelFactory)
 				.get(ShoppingItemsViewModel.class);
-		viewModel.init(shoppingList.getId());
 
 		adapter = new ShoppingItemsAdapter(shoppingList.isArchived(), this, viewModel);
 		recyclerView.setAdapter(adapter);

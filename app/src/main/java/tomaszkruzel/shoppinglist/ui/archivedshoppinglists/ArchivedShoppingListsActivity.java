@@ -1,10 +1,8 @@
 package tomaszkruzel.shoppinglist.ui.archivedshoppinglists;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,16 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
+import tomaszkruzel.shoppinglist.ui.BaseDaggerAppCompatActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ArchivedShoppingListsViewModel;
+import tomaszkruzel.shoppinglist.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
 
-public class ArchivedShoppingListsActivity extends AppCompatActivity {
+public class ArchivedShoppingListsActivity extends BaseDaggerAppCompatActivity {
 
 	@Inject
-	ViewModelProvider.Factory viewModelFactory;
+	ViewModelFactory<ArchivedShoppingListsViewModel> viewModelFactory;
 
 	private ArchivedShoppingListsViewModel viewModel;
 	private RecyclerView recyclerView;
@@ -30,7 +29,6 @@ public class ArchivedShoppingListsActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_archived_shopping_lists);
 		initToolbar();

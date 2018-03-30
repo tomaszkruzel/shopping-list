@@ -4,14 +4,15 @@ import android.app.Application;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 import tomaszkruzel.shoppinglist.MyApplication;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = { AndroidInjectionModule.class, AppModule.class, ActiveShoppingListsActivityModule.class,
-		ArchiveShoppingListsActivityModule.class, ShoppingItemsActivityModule.class })
-public interface AppComponent {
+@Component(modules = { AndroidInjectionModule.class, AppModule.class, ActivityBindingModule.class, AndroidSupportInjectionModule.class, })
+public interface AppComponent extends AndroidInjector<MyApplication> {
 
 	@Component.Builder
 	interface Builder {
@@ -21,6 +22,4 @@ public interface AppComponent {
 
 		AppComponent build();
 	}
-
-	void inject(MyApplication application);
 }

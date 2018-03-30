@@ -1,11 +1,9 @@
 package tomaszkruzel.shoppinglist.ui.activeshoppinglists;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,19 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import dagger.android.AndroidInjection;
 import tomaszkruzel.shoppinglist.R;
 import tomaszkruzel.shoppinglist.model.ShoppingList;
+import tomaszkruzel.shoppinglist.ui.BaseDaggerAppCompatActivity;
 import tomaszkruzel.shoppinglist.ui.archivedshoppinglists.ArchivedShoppingListsActivity;
 import tomaszkruzel.shoppinglist.viewmodel.ActiveShoppingListsViewModel;
+import tomaszkruzel.shoppinglist.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
 
-public class ActiveShoppingListsActivity extends AppCompatActivity
+public class ActiveShoppingListsActivity extends BaseDaggerAppCompatActivity
 		implements AddShoppingListDialog.AddShoppingListListener, EditShoppingListDialog.EditShoppingListListener {
 
 	@Inject
-	ViewModelProvider.Factory viewModelFactory;
+	ViewModelFactory<ActiveShoppingListsViewModel> viewModelFactory;
 
 	private ActiveShoppingListsViewModel viewModel;
 	private RecyclerView recyclerView;
@@ -35,7 +34,6 @@ public class ActiveShoppingListsActivity extends AppCompatActivity
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_active_shopping_lists);
 		initToolbar();
